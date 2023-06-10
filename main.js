@@ -103,6 +103,16 @@ function hideVistaProducto(){
     VistaProducto.classList.add("inactive");
 }
 
+function showVistaProducto(){
+    VistaProducto.classList.remove("inactive");
+    blMobiletopMenuPointerOver = true;
+    hideMobiletopMenu();
+    blDesktopMenuPointerOver = true;
+    hideDesktopMenu();
+    blCarritoPointerOver = true;
+    hideCarrito();
+}
+
 function getProducts(arrProdList) {
 
     for (let i = 0; i < 10; i++) {
@@ -143,6 +153,7 @@ function showProducts(arrProdList) {
         div_productCard.classList.add('product-card');
         const img = document.createElement('img');
         img.setAttribute('src', product.image);
+        img.addEventListener('click', showVistaProducto );
         div_productCard.append(img);
 
         const div_productInfo = document.createElement('div');
