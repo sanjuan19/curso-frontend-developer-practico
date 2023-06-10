@@ -2,34 +2,40 @@
 const menuEmail = document.querySelector('.navbar-email');
 const imgMobileMenu = document.querySelector('.menu');
 const imgCarrito = document.querySelector('.navbar-shopping-cart');
+const imgCerrarDetalleProd = document.querySelector(".product-detail-close");
 
 // Menús y elementos que se accionan y se retiran
 const DeskTopMenu = document.querySelector('.desktop-menu');
 const MobileTopMenu = document.querySelector('.mobile-menu');
-const Carrito = document.querySelector('.product-detail');
+const Carrito = document.querySelector('#Carrito');
+const VistaProducto = document.querySelector("#VistaProducto");
 
 // Lista de productos
 const productList = [];
 const CardsContainer = document.querySelector('.cards-container');
-const formatMoney = new Intl.NumberFormat('en-US',{style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2});
-
+const formatMoney = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 
 let blDesktopMenuPointerOver = false;
 let blMobiletopMenuPointerOver = false;
 let blCarritoPointerOver = false;
+let blVistaProductoPointerOver = false;
 
 menuEmail.addEventListener('click', showDesktopMenu);
 imgMobileMenu.addEventListener('click', showMobiletopMenu);
 imgCarrito.addEventListener('click', showCarrito);
+imgCerrarDetalleProd.addEventListener('click', hideVistaProducto);
 
 DeskTopMenu.addEventListener('pointerleave', hideDesktopMenu);
 MobileTopMenu.addEventListener('pointerleave', hideMobiletopMenu);
 Carrito.addEventListener('pointerleave', hideCarrito);
 
+
 DeskTopMenu.addEventListener('pointerenter', setDesktopMenu);
 MobileTopMenu.addEventListener('pointerenter', setMobiletopMenu);
 Carrito.addEventListener('pointerenter', setCarrito);
+
+
 
 function showDesktopMenu() {
     DeskTopMenu.classList.toggle("inactive");
@@ -37,6 +43,7 @@ function showDesktopMenu() {
     hideCarrito();
     blMobiletopMenuPointerOver = true;
     hideMobiletopMenu();
+    hideVistaProducto();
 }
 
 function hideDesktopMenu() {
@@ -58,6 +65,7 @@ function showMobiletopMenu() {
     hideCarrito();
     blDesktopMenuPointerOver = true;
     hideDesktopMenu();
+    hideVistaProducto();
 }
 
 function hideMobiletopMenu() {
@@ -77,6 +85,7 @@ function showCarrito() {
     hideMobiletopMenu();
     blDesktopMenuPointerOver = true;
     hideDesktopMenu();
+    hideVistaProducto();
 }
 
 function hideCarrito() {
@@ -90,63 +99,78 @@ function setCarrito() {
     blCarritoPointerOver = true;
 }
 
-
-
-for (let i = 0; i < 10; i++) {
-
-    productList.push({
-        name: 'Bicicleta ' + i,
-        price: 120 * ( i+1 ),
-        image: 'https://images.pexels.com/photos/276517/pexels-photo-276517.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
-    })
+function hideVistaProducto(){
+    VistaProducto.classList.add("inactive");
 }
 
-for( product of productList){
+function getProducts(arrProdList) {
+
+    for (let i = 0; i < 10; i++) {
+
+        arrProdList.push({
+            name: 'Bicicleta ' + i,
+            price: 120 * (i + 1),
+            image: 'https://images.pexels.com/photos/276517/pexels-photo-276517.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
+        })
+    }
+
+}
+
+function showProducts(arrProdList) {
 
 
-    /** 
-     * Se requiere insertar este formato por cada producto
-    <div class="product-card">
-        <img src="https://images.pexels.com/photos/276517/pexels-photo-276517.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="">
-        <div class="product-info">
-          <div>
-            <p>$120,00</p>
-            <p>Bike</p>
+
+    for (product of arrProdList) {
+
+
+        /** 
+         * Se requiere insertar este formato por cada producto
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/276517/pexels-photo-276517.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="">
+            <div class="product-info">
+              <div>
+                <p>$120,00</p>
+                <p>Bike</p>
+              </div>
+              <figure>
+                <img src="./icons/bt_add_to_cart.svg" alt="">
+              </figure>
+            </div>
           </div>
-          <figure>
-            <img src="./icons/bt_add_to_cart.svg" alt="">
-          </figure>
-        </div>
-      </div>
-    */ 
+        */
 
-    const div_productCard = document.createElement('div');
-    div_productCard.classList.add('product-card');
-    const img = document.createElement('img');
-    img.setAttribute('src', product.image );
-    div_productCard.append( img );
+        const div_productCard = document.createElement('div');
+        div_productCard.classList.add('product-card');
+        const img = document.createElement('img');
+        img.setAttribute('src', product.image);
+        div_productCard.append(img);
 
-    const div_productInfo = document.createElement('div');
-    div_productInfo.classList.add('product-info');
-    const div_subProductInfo = document.createElement('div');
-    const pPrice = document.createElement('p');
-    pPrice.innerText = formatMoney.format( product.price );
-    
-    const pName = document.createElement('p');
+        const div_productInfo = document.createElement('div');
+        div_productInfo.classList.add('product-info');
+        const div_subProductInfo = document.createElement('div');
+        const pPrice = document.createElement('p');
+        pPrice.innerText = formatMoney.format(product.price);
 
-    pName.innerText = product.name;
-    div_subProductInfo.append(pPrice);
-    div_subProductInfo.append(pName);
-    div_productInfo.append(div_subProductInfo);
+        const pName = document.createElement('p');
 
-    const fig = document.createElement('figure');
-    const icon = document.createElement('img');
-    icon.setAttribute('src', './icons/bt_add_to_cart.svg' );
-    fig.append(icon);
-    div_productInfo.append(fig);
-    div_productCard.append(div_productInfo);
+        pName.innerText = product.name;
+        div_subProductInfo.append(pPrice);
+        div_subProductInfo.append(pName);
+        div_productInfo.append(div_subProductInfo);
 
-    CardsContainer.append(div_productCard);
+        const fig = document.createElement('figure');
+        const icon = document.createElement('img');
+        icon.setAttribute('src', './icons/bt_add_to_cart.svg');
+        fig.append(icon);
+        div_productInfo.append(fig);
+        div_productCard.append(div_productInfo);
 
+        CardsContainer.append(div_productCard);
 
-};
+    }
+}
+
+// Código general
+
+getProducts( productList );
+showProducts( productList );
